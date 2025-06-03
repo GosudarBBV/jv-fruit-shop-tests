@@ -28,7 +28,7 @@ class ReportGeneratorImplTest {
                 + "apple,10" + System.lineSeparator()
                 + "banana,20";
 
-        String actualReport = reportGenerator.getReport(store);
+        String actualReport = reportGenerator.getReport();
         assertEquals(expectedReport, actualReport);
     }
 
@@ -36,7 +36,7 @@ class ReportGeneratorImplTest {
     void getReport_withEmptyList_returnsHeaderOnly() {
         List<FruitOperation> store = Collections.emptyList();
         String expectedReport = "fruit,quantity";
-        String actualReport = reportGenerator.getReport(store);
+        String actualReport = reportGenerator.getReport();
         assertEquals(expectedReport, actualReport);
     }
 }

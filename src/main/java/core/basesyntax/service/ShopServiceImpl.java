@@ -1,6 +1,7 @@
 package core.basesyntax.service;
 
 import core.basesyntax.dao.FruitOperationDao;
+import core.basesyntax.db.Storage;
 import core.basesyntax.model.FruitOperation;
 import core.basesyntax.strategy.OperationStrategy;
 import java.util.List;
@@ -18,24 +19,21 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public void changeQuantityStore(List<FruitOperation> fruits) {
         for (FruitOperation fruit : fruits) {
-            if (fruit.getOperation() == FruitOperation.Operation.BALANCE) {
-                fruitOperationDao.add(fruit);
-                continue;
-            }
+            String fruitName = fruit.getFruit();
 
-            Optional<FruitOperation> currentFruitOpt = fruitOperationDao.get(fruit.getFruit());
-            if (currentFruitOpt.isEmpty()) {
-                System.err.println("Fruit not found in store, skipping: " + fruit.getFruit());
-                continue;
-            }
-
-            FruitOperation currentFruit = currentFruitOpt.get();
+            Optional<FruitOperation> currentFruitOpt = fruitOperationDao.get(fruitName);
+            FruitOperation currentFruit = currentFruitOpt.orElse(fruit);
 
             int newValueFrom = strategy.get(fruit.getOperation())
-                    .getQuantityFromStore(currentFruit.getQuantity(), fruit.getQuantity());
+                    .getQuantityFromStore(currentFruit, fruit.getQuantity());
 
             currentFruit.setQuantity(newValueFrom);
-            fruitOperationDao.update(currentFruit);
+
+            if (currentFruitOpt.isEmpty()) {
+                fruitOperationDao.add(currentFruit);
+            } else {
+                fruitOperationDao.update(currentFruit);
+            }
         }
     }
 }
