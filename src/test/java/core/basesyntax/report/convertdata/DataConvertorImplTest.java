@@ -1,10 +1,10 @@
 package core.basesyntax.report.convertdata;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import core.basesyntax.model.FruitOperation;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,31 +44,23 @@ class DataConvertorImplTest {
     }
 
     @Test
-    void testConvertToTransactionWithInvalidData() {
+    void testConvertToTransactionWithInvalidOperation_shouldThrowException() {
         List<String> fruitInfoList = Arrays.asList(
                 "operation,fruit,quantity",
-                "b,apple,10",
-                "x,banana,-20",
-                ",orange,5",
-                "r,kiwi,abc"
+                "x,banana,10"
         );
 
-        List<FruitOperation> result = dataConvertor.convertToTransaction(fruitInfoList);
-
-        assertEquals(2, result.size());
-
-        assertEquals(FruitOperation.Operation.BALANCE, result.get(0).getOperation());
-        assertEquals("apple", result.get(0).getFruit());
-        assertEquals(10, result.get(0).getQuantity());
-
-        assertEquals(FruitOperation.Operation.RETURN, result.get(1).getOperation());
-        assertEquals("kiwi", result.get(1).getFruit());
-        assertEquals(0, result.get(1).getQuantity());
+        assertThrows(IllegalArgumentException.class, () -> {
+            dataConvertor.convertToTransaction(fruitInfoList);
+        });
     }
 
     @Test
-    void testConvertToTransactionWithEmptyList() {
-        List<String> fruitInfoList = Collections.emptyList();
+    void testConvertToTransactionWithEmptyFruitName_shouldSkipLine() {
+        List<String> fruitInfoList = Arrays.asList(
+                "operation,fruit,quantity",
+                "b,,10"
+        );
 
         List<FruitOperation> result = dataConvertor.convertToTransaction(fruitInfoList);
 
@@ -76,7 +68,34 @@ class DataConvertorImplTest {
     }
 
     @Test
-    void testConvertToTransactionWithInvalidCsvFormat() {
+    void testConvertToTransactionWithInvalidQuantityFormat_shouldSetQuantityToZero() {
+        List<String> fruitInfoList = Arrays.asList(
+                "operation,fruit,quantity",
+                "r,kiwi,abc"
+        );
+
+        List<FruitOperation> result = dataConvertor.convertToTransaction(fruitInfoList);
+
+        assertEquals(1, result.size());
+        assertEquals(FruitOperation.Operation.RETURN, result.get(0).getOperation());
+        assertEquals("kiwi", result.get(0).getFruit());
+        assertEquals(0, result.get(0).getQuantity());
+    }
+
+    @Test
+    void testConvertToTransactionWithNegativeQuantity_shouldSkipLine() {
+        List<String> fruitInfoList = Arrays.asList(
+                "operation,fruit,quantity",
+                "b,apple,-5"
+        );
+
+        List<FruitOperation> result = dataConvertor.convertToTransaction(fruitInfoList);
+
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    void testConvertToTransactionWithWrongColumnCount_shouldSkipLine() {
         List<String> fruitInfoList = Arrays.asList(
                 "operation,fruit,quantity",
                 "b,apple",
@@ -87,30 +106,8 @@ class DataConvertorImplTest {
         List<FruitOperation> result = dataConvertor.convertToTransaction(fruitInfoList);
 
         assertEquals(1, result.size());
-
         assertEquals(FruitOperation.Operation.SUPPLY, result.get(0).getOperation());
         assertEquals("banana", result.get(0).getFruit());
         assertEquals(20, result.get(0).getQuantity());
-    }
-
-    @Test
-    void testConvertToTransactionWithAllValid() {
-        List<String> fruitInfoList = Arrays.asList(
-                "operation,fruit,quantity",
-                "b,grape,50",
-                "s,apple,100"
-        );
-
-        List<FruitOperation> result = dataConvertor.convertToTransaction(fruitInfoList);
-
-        assertEquals(2, result.size());
-
-        assertEquals(FruitOperation.Operation.BALANCE, result.get(0).getOperation());
-        assertEquals("grape", result.get(0).getFruit());
-        assertEquals(50, result.get(0).getQuantity());
-
-        assertEquals(FruitOperation.Operation.SUPPLY, result.get(1).getOperation());
-        assertEquals("apple", result.get(1).getFruit());
-        assertEquals(100, result.get(1).getQuantity());
     }
 }

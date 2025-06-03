@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import core.basesyntax.model.FruitOperation;
-import core.basesyntax.report.convertdata.DataConvertorImpl;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,23 +25,22 @@ class FileReaderImplTest {
     void readTestFile_ok() {
         List<String> actual = fileReader.read(VALID_FILE);
 
-        List<FruitOperation> expected = Arrays.asList(
-                new FruitOperation(FruitOperation.Operation.BALANCE, "banana", 20),
-                new FruitOperation(FruitOperation.Operation.BALANCE, "apple", 35),
-                new FruitOperation(FruitOperation.Operation.RETURN, "apple", 10),
-                new FruitOperation(FruitOperation.Operation.PURCHASE, "apple", 24),
-                new FruitOperation(FruitOperation.Operation.PURCHASE, "banana", 5),
-                new FruitOperation(FruitOperation.Operation.SUPPLY, "banana", 50),
-                new FruitOperation(FruitOperation.Operation.SUPPLY, "banana", 70),
-                new FruitOperation(FruitOperation.Operation.PURCHASE, "banana", 13),
-                new FruitOperation(FruitOperation.Operation.PURCHASE, "apple", 22),
-                new FruitOperation(FruitOperation.Operation.PURCHASE, "banana", 15),
-                new FruitOperation(FruitOperation.Operation.SUPPLY, "banana", 50)
+        List<String> expected = Arrays.asList(
+                "operation,fruit,quantity",
+                "b,banana,20",
+                "b,apple,35",
+                "r,apple,10",
+                "p,apple,24",
+                "p,banana,5",
+                "s,banana,50",
+                "s,banana,70",
+                "p,banana,13",
+                "p,apple,22",
+                "p,banana,15",
+                "s,banana,50"
         );
 
-        DataConvertorImpl converter = new DataConvertorImpl();
-        List<FruitOperation> transactionList = converter.convertToTransaction(actual);
-        assertEquals(expected, transactionList);
+        assertEquals(expected, actual);
     }
 
     @Test

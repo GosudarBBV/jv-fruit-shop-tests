@@ -1,7 +1,6 @@
 package core.basesyntax.service;
 
 import core.basesyntax.dao.FruitOperationDao;
-import core.basesyntax.db.Storage;
 import core.basesyntax.model.FruitOperation;
 import core.basesyntax.strategy.OperationStrategy;
 import java.util.List;

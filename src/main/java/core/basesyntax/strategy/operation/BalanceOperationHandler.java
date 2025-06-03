@@ -17,6 +17,7 @@ public class BalanceOperationHandler implements OperationHandler {
         if (fruitOperationDao.get(fruitName).isPresent()) {
             throw new IllegalArgumentException("Fruit already exists in store: " + fruitName);
         }
+        fruitOperation.setQuantity(value);
         fruitOperationDao.add(fruitOperation);
         return value;
     }

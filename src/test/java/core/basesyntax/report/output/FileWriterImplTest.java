@@ -2,17 +2,18 @@ package core.basesyntax.report.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class FileWriterImplTest {
     private static final String TEST_OUTPUT_FILE = "src/test/resources/test_output.csv";
+    private final Path outputPath = Path.of(TEST_OUTPUT_FILE);
     private FileWriterImpl fileWriter;
 
     @BeforeEach
@@ -21,28 +22,29 @@ class FileWriterImplTest {
     }
 
     @AfterEach
-    void tearDown() throws IOException {
-        Files.deleteIfExists(Paths.get(TEST_OUTPUT_FILE));
+    void cleanUp() throws IOException {
+        Files.deleteIfExists(outputPath);
     }
 
     @Test
-    void write_validContent_fileCreatedAndContentMatches() throws IOException {
-        String content = "fruit,quantity\napple,10\nbanana,20";
-        fileWriter.write(content, TEST_OUTPUT_FILE);
-        String writtenContent = Files.readString(Paths.get(TEST_OUTPUT_FILE));
-        assertEquals(content, writtenContent);
+    void write_validInput_writesFileCorrectly() throws IOException {
+        String expected = "fruit,quantity\napple,10\nbanana,20";
+
+        fileWriter.write(expected, TEST_OUTPUT_FILE);
+
+        String actual = Files.readString(outputPath);
+        assertEquals(expected, actual);
     }
 
     @Test
-    void write_invalidPath_throwsRuntimeException() {
+    void write_invalidPath_throwsRuntimeExceptionWithCause() {
         String invalidPath = "/invalid_path/test_output.csv";
         String content = "fruit,quantity\napple,10";
 
-        Exception exception = assertThrows(RuntimeException.class, () ->
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
                 fileWriter.write(content, invalidPath)
         );
 
-        assertTrue(exception.getCause() instanceof IOException);
+        assertEquals(FileNotFoundException.class, exception.getCause().getClass());
     }
-
 }
