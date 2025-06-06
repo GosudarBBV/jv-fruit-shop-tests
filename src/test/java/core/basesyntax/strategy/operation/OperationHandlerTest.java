@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import core.basesyntax.db.Storage;
 import core.basesyntax.model.FruitOperation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ public class OperationHandlerTest {
 
     @BeforeEach
     public void setUp() {
+        Storage.SHOP_STORE.clear();
         balanceHandler = new BalanceOperationHandler();
         supplyHandler = new SupplyOperationHandler();
         returnHandler = new ReturnOperationHandler();

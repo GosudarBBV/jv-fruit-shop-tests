@@ -30,9 +30,12 @@ class DataConvertorImplTest {
 
         assertEquals(3, result.size());
 
-        assertEquals(new FruitOperation(FruitOperation.Operation.BALANCE, "apple", 10), result.get(0));
-        assertEquals(new FruitOperation(FruitOperation.Operation.SUPPLY, "banana", 20), result.get(1));
-        assertEquals(new FruitOperation(FruitOperation.Operation.PURCHASE, "orange", 5), result.get(2));
+        assertEquals(new FruitOperation(FruitOperation.Operation.BALANCE, "apple", 10),
+                result.get(0));
+        assertEquals(new FruitOperation(FruitOperation.Operation.SUPPLY, "banana", 20),
+                result.get(1));
+        assertEquals(new FruitOperation(FruitOperation.Operation.PURCHASE, "orange", 5),
+                result.get(2));
     }
 
     @Test

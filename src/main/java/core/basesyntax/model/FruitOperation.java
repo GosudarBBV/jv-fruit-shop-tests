@@ -43,12 +43,16 @@ public class FruitOperation {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         FruitOperation that = (FruitOperation) o;
-        return quantity == that.quantity &&
-                operation == that.operation &&
-                Objects.equals(fruit, that.fruit);
+        return quantity == that.quantity
+                && operation == that.operation
+                && Objects.equals(fruit, that.fruit);
     }
 
     @Override

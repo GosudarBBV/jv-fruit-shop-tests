@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import core.basesyntax.dao.FruitOperationDao;
 import core.basesyntax.dao.FruitOperationDaoImpl;
 import core.basesyntax.model.FruitOperation;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
