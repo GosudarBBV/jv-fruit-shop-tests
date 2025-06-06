@@ -53,7 +53,7 @@ class ShopServiceImplTest {
 
         when(fruitOperationDao.get("banana")).thenReturn(Optional.of(existing));
         when(operationStrategy.get(Operation.PURCHASE)).thenReturn(operationHandler);
-        when(operationHandler.getQuantityFromStore(existing, 5)).thenReturn(10); // 15 - 5 = 10
+        when(operationHandler.getQuantityFromStore(existing, 5)).thenReturn(10);
 
         shopService.changeQuantityStore(List.of(input));
 

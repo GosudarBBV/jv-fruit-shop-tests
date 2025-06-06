@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import core.basesyntax.dao.FruitOperationDao;
+import core.basesyntax.dao.FruitOperationDaoImpl;
 import core.basesyntax.model.FruitOperation;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,12 +13,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class FruitOperationServiceImplTest {
-    private InMemoryFruitOperationDao fruitOperationDao;
+    private FruitOperationDao fruitOperationDao;
     private FruitOperationServiceImpl fruitOperationService;
 
     @BeforeEach
     void setUp() {
-        fruitOperationDao = new InMemoryFruitOperationDao();
+        fruitOperationDao = new FruitOperationDaoImpl();
         fruitOperationService = new FruitOperationServiceImpl(fruitOperationDao);
     }
 
@@ -53,24 +54,4 @@ class FruitOperationServiceImplTest {
         assertEquals("mango", stored.get().getFruit());
     }
 
-    // ----------- In-memory DAO stub -----------
-
-    static class InMemoryFruitOperationDao implements FruitOperationDao {
-        private final Map<String, FruitOperation> store = new HashMap<>();
-
-        @Override
-        public void add(FruitOperation fruit) {
-            store.put(fruit.getFruit(), fruit);
-        }
-
-        @Override
-        public Optional<FruitOperation> get(String fruit) {
-            return Optional.ofNullable(store.get(fruit));
-        }
-
-        @Override
-        public void update(FruitOperation fruit) {
-            store.put(fruit.getFruit(), fruit);
-        }
-    }
 }

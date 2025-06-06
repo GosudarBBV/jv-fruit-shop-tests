@@ -26,7 +26,7 @@ class FruitOperationDaoImplTest {
     }
 
     @Test
-    void testAddAndGetFruit_shouldReturnFruitWithCorrectQuantity() {
+    void testAddAndGetFruitWithCorrectQuantity() {
         FruitOperation apple = new FruitOperation(FruitOperation.Operation.BALANCE, "apple", 10);
         fruitOperationDao.add(apple);
 
